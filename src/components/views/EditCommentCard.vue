@@ -9,7 +9,7 @@
         <img :src="minusIconUrl" alt="Minus" class="btn-downvote-icon" />
       </button>
     </div>
-    <div class="content-container">
+    <div class="edit-comment-container">
       <div class="user-reply-container">
         <div class="user-container">
           <img :src="imageUrl" alt="" class="user-avatar" />
@@ -32,11 +32,17 @@
           </button>
         </div>
       </div>
-      <p>
-        Impressive! Though it seems the drag feature could be improved. But
-        overall it looks incredible. You've nailed the design and responsiveness
-        at various breakpoints works really well.
-      </p>
+      <div class="user-edit-container">
+        <textarea
+          id="edit-comment-content"
+          name="edit-comment-content"
+          placeholder="Add a comment..."
+          >{{ commentContent }}</textarea
+        >
+      </div>
+      <div class="update-button-container">
+        <button class="update-button">Update</button>
+      </div>
     </div>
   </div>
 </template>
@@ -51,11 +57,13 @@ import plusIconUrl from "@/assets/images/icon-plus.svg";
 import replyIconUrl from "@/assets/images/icon-reply.svg";
 
 export default defineComponent({
-  name: "CommentCard",
+  name: "EditCommentCard",
   props: {
     ownedByCurrentUser: { type: Boolean },
   },
   setup() {
+    const commentContent =
+      "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and responsiveness at various breakpoints works really well.";
     return {
       imageUrl,
       deleteIconUrl,
@@ -63,6 +71,7 @@ export default defineComponent({
       minusIconUrl,
       plusIconUrl,
       replyIconUrl,
+      commentContent,
     };
   },
 });
@@ -188,5 +197,60 @@ button {
 
 .upvote-icon {
   fill: black;
+}
+
+.user-edit-container textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
+
+  border: 1px solid var(--light-gray);
+  border-radius: 5px;
+  padding: 1em;
+
+  width: 100%;
+  min-height: 10ch;
+  font-family: Rubik, sans-serif;
+  font-size: var(--p-font-size);
+  color: var(--color-dark-blue);
+
+  cursor: pointer;
+
+  margin-bottom: 1.5rem;
+}
+
+.user-edit-container textarea:hover {
+  border-color: var(--color-moderate-blue);
+}
+
+.edit-comment-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.update-button-container {
+  display: flex;
+  justify-content: end;
+}
+.update-button {
+  background-color: var(--color-moderate-blue);
+  padding: 0.6em 1.2em;
+  border-radius: 5px;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 1rem;
+  font-family: Rubik, sans-serif;
+}
+
+.update-button:hover {
+  opacity: 0.5;
 }
 </style>

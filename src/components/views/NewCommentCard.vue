@@ -11,7 +11,7 @@
       />
     </div>
     <div class="send-button-container">
-      <button class="send-button">Send</button>
+      <button class="send-button">{{ buttonText }}</button>
     </div>
   </div>
 </template>
@@ -22,6 +22,9 @@ import imageUrl from "@/assets/images/avatars/image-juliusomo.png"; // => or rel
 
 export default defineComponent({
   name: "NewCommentCard",
+  props: {
+    buttonText: { type: String },
+  },
   setup() {
     return { imageUrl };
   },
@@ -30,13 +33,14 @@ export default defineComponent({
 
 <style>
 .new-comment-card-container {
-  width: 50vw;
+  width: 100%;
   border-radius: 10px;
   background-color: white;
   padding: 1.5rem;
 
   display: flex;
   flex-direction: row;
+  margin-bottom: 1.5rem;
 }
 
 .new-comment-user-avatar {
@@ -68,6 +72,12 @@ export default defineComponent({
   font-family: Rubik, sans-serif;
   font-size: var(--p-font-size);
   color: var(--color-dark-blue);
+
+  cursor: pointer;
+}
+
+.user-input-container textarea:hover {
+  border-color: var(--color-moderate-blue);
 }
 
 .send-button {
