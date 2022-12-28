@@ -5,6 +5,19 @@
     <CommentCard :ownedByCurrentUser="true" />
     <ReplySection />
     <NewCommentCard buttonText="Send" />
+    <ButtonIconText :text-color="colors.primary.moderateBlue"
+      ><template #icon><ReplyIcon /></template>Reply</ButtonIconText
+    >
+    <ButtonIconText :text-color="colors.primary.moderateBlue"
+      ><template #icon><EditIcon /></template>Edit</ButtonIconText
+    >
+
+    <ButtonIconText :text-color="colors.primary.softRed"
+      ><template #icon><DeleteIcon /></template>Delete</ButtonIconText
+    >
+    <div class="button-color-container">
+      <ButtonColor>Test</ButtonColor>
+    </div>
   </div>
 </template>
 
@@ -13,6 +26,12 @@ import { defineComponent } from "vue";
 import CommentCard from "./CommentCard.vue";
 import NewCommentCard from "./NewCommentCard.vue";
 import ReplySection from "./ReplySection.vue";
+import ReplyIcon from "@/components/icons/IconReply.vue";
+import EditIcon from "@/components/icons/IconEdit.vue";
+import DeleteIcon from "@/components/icons/IconDelete.vue";
+import ButtonIconText from "@/components/ButtonIconText.vue";
+import ButtonColor from "@/components/ButtonColor.vue";
+import { colors } from "@/config";
 
 export default defineComponent({
   name: "InteractiveCommentSection",
@@ -20,17 +39,33 @@ export default defineComponent({
     CommentCard,
     NewCommentCard,
     ReplySection,
+    ButtonIconText,
+    ReplyIcon,
+    EditIcon,
+    DeleteIcon,
+    ButtonColor,
   },
   // props: {},
   setup() {
-    return {};
+    return { colors };
   },
 });
 </script>
 
 <style>
 .container {
-  width: 50vw;
+  width: 80vw;
   margin-top: 1.5rem;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.button-color-container {
+  width: 200px;
+  margin-inline: auto;
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto;
 }
 </style>
