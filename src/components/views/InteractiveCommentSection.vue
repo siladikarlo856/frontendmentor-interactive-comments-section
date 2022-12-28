@@ -5,18 +5,32 @@
     <CommentCard :ownedByCurrentUser="true" />
     <ReplySection />
     <NewCommentCard buttonText="Send" />
-    <ButtonIconText :text-color="colors.primary.moderateBlue"
-      ><template #icon><ReplyIcon /></template>Reply</ButtonIconText
-    >
-    <ButtonIconText :text-color="colors.primary.moderateBlue"
-      ><template #icon><EditIcon /></template>Edit</ButtonIconText
-    >
+    <div class="button-color-container">
+      <ButtonIconText :text-color="colors.primary.moderateBlue"
+        ><template #icon><ReplyIcon /></template>Reply</ButtonIconText
+      >
+    </div>
 
-    <ButtonIconText :text-color="colors.primary.softRed"
-      ><template #icon><DeleteIcon /></template>Delete</ButtonIconText
-    >
+    <div class="button-color-container">
+      <ButtonIconText :text-color="colors.primary.moderateBlue"
+        ><template #icon><EditIcon /></template>Edit</ButtonIconText
+      >
+    </div>
+
+    <div class="button-color-container">
+      <ButtonIconText :text-color="colors.primary.softRed"
+        ><template #icon><DeleteIcon /></template>Delete</ButtonIconText
+      >
+    </div>
+
     <div class="button-color-container">
       <ButtonColor>Test</ButtonColor>
+    </div>
+    <div
+      class="button-color-container"
+      style="background-color: white; padding: 1rem"
+    >
+      <VoteCounter />
     </div>
   </div>
 </template>
@@ -32,6 +46,7 @@ import DeleteIcon from "@/components/icons/IconDelete.vue";
 import ButtonIconText from "@/components/ButtonIconText.vue";
 import ButtonColor from "@/components/ButtonColor.vue";
 import { colors } from "@/config";
+import VoteCounter from "@/components/VoteCounter.vue";
 
 export default defineComponent({
   name: "InteractiveCommentSection",
@@ -44,6 +59,7 @@ export default defineComponent({
     EditIcon,
     DeleteIcon,
     ButtonColor,
+    VoteCounter,
   },
   // props: {},
   setup() {
