@@ -3,34 +3,35 @@
     <button @click="onUpvoteClick" class="btn-vote-plus">
       <i> <PlusIcon /> </i>
     </button>
-    <div class="vote-score">{{ score }}</div>
+    <div class="vote-score">{{ modelValue }}</div>
     <button @click="onDownvoteClick" class="btn-vote-minus">
       <i> <MinusIcon /> </i>
     </button>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import PlusIcon from "./icons/IconPlus.vue";
 import MinusIcon from "./icons/IconMinus.vue";
 
 export default defineComponent({
   name: "VoteCounter",
+  props: {
+    modelValue: { type: Number, required: true },
+  },
   components: {
     PlusIcon,
     MinusIcon,
   },
-  setup(_, context) {
-    const score = ref(0);
-
+  setup(props, context) {
     function onUpvoteClick() {
-      score.value++;
+      context.emit("update:modelValue", props.modelValue + 1);
     }
 
     function onDownvoteClick() {
-      score.value--;
+      context.emit("update:modelValue", props.modelValue - 1);
     }
-    return { score, onUpvoteClick, onDownvoteClick };
+    return { onUpvoteClick, onDownvoteClick };
   },
 });
 </script>
@@ -62,6 +63,7 @@ button {
   color: inherit;
   margin: 0;
   padding: 0;
+  border: none;
   text-transform: none;
   background-color: transparent;
   background-image: none;

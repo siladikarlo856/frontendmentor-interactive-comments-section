@@ -1,5 +1,5 @@
 <template>
-  <button @click.prevent="onClick" :style="{ color: textColor }">
+  <button :style="{ color: textColor }">
     <i>
       <slot name="icon"></slot>
     </i>
@@ -14,11 +14,8 @@ export default defineComponent({
   props: {
     textColor: { type: String },
   },
-  setup(_, context) {
-    function onClick() {
-      context.emit("click");
-    }
-    return { onClick };
+  setup() {
+    return {};
   },
 });
 </script>
@@ -40,6 +37,7 @@ button {
   text-transform: none;
   background-color: transparent;
   background-image: none;
+  border: none;
 
   cursor: pointer;
   font-size: var(--p-font-size);

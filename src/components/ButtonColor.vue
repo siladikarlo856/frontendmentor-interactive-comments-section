@@ -1,5 +1,5 @@
 <template>
-  <button @click.prevent="onClick">
+  <button>
     <slot></slot>
   </button>
 </template>
@@ -7,14 +7,8 @@
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "ButtonColor",
-  props: {
-    textColor: { type: String },
-  },
-  setup(_, context) {
-    function onClick() {
-      context.emit("click");
-    }
-    return { onClick };
+  setup() {
+    return {};
   },
 });
 </script>
@@ -31,6 +25,7 @@ button {
   text-transform: none;
   background-color: transparent;
   background-image: none;
+  border: none;
 
   cursor: pointer;
   font-size: var(--p-font-size);

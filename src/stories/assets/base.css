@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Rubik:wght@400;500;600&display=swap");
+:root {
+  /* PRIMARY */
+  --color-moderate-blue: #5457b6;
+  --color-soft-red: #ed6468;
+  --color-light-grayish-blue: #c3c4ef;
+  --color-pale-red: #ffb8bb;
+
+  /* NEUTRAL */
+  --color-dark-blue: #324152;
+  --grayish-blue: #67727e;
+  --light-gray: #eaecf1;
+  --color-very-light-gray: #f5f6fa;
+  --color-white: #ffffff;
+
+  /* TYPOGRAPHY */
+  --p-font-size: 16px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --border-radius-small: 5px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 15px;
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-background: var(--color-very-light-gray);
+  --color-text: var(--grayish-blue);
+}
+/* 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--vt-c-black); 
+    --color-text: var(--vt-c-text-dark-2);
+  }
+} */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: var(--font-weight-regular);
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color 0.5s, background-color 0.5s;
+  /* line-height: 1.6; */
+  font-family: Rubik, sans-serif;
+  font-size: var(--p-font-size);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
