@@ -73,7 +73,6 @@ export default defineComponent({
     createdAt: { type: String },
     ownedByCurrentUser: { type: Boolean, default: false },
     commentContent: { type: String },
-    editorMode: { type: String },
   },
   components: {
     VoteCounter,
@@ -85,6 +84,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const voteCount = ref(0);
+    const editorMode = ref("preview");
 
     const textareaRef = ref<HTMLTextAreaElement>();
 
@@ -93,8 +93,8 @@ export default defineComponent({
       import.meta.url
     ).href;
 
-    const isPreviewMode = computed(() => props.editorMode === "preview");
-    const isEditMode = computed(() => props.editorMode === "edit");
+    const isPreviewMode = computed(() => editorMode.value === "preview");
+    const isEditMode = computed(() => editorMode.value === "edit");
 
     function onReplyClicked() {
       console.log("Reply clicked");
@@ -104,13 +104,14 @@ export default defineComponent({
     }
     function onEditClicked() {
       console.log("edit clicked");
-      context.emit("open-edit-mode");
+      editorMode.value = "edit";
       nextTick().then(() => {
         adjustTextareaHeight();
       });
     }
 
     function onUpdateButtonClicked() {
+      editorMode.value = "preview";
       context.emit("update");
     }
 

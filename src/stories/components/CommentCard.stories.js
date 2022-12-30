@@ -16,13 +16,7 @@ const Template = (args) => ({
       `Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and responsiveness at various breakpoints works really well.`
     );
 
-    function openEditorInEditMode() {
-      editorMode.value = "edit";
-    }
-
-    function onCommentUpdate() {
-      editorMode.value = "preview";
-    }
+    function onCommentUpdate() {}
 
     function onValueChanged(newValue) {
       commentContent.value = newValue;
@@ -30,7 +24,6 @@ const Template = (args) => ({
     return {
       args,
       editorMode,
-      openEditorInEditMode,
       onCommentUpdate,
       commentContent,
       onValueChanged,
@@ -40,9 +33,7 @@ const Template = (args) => ({
   /* html */
   template: `<CommentCard 
       v-bind="args" 
-      :editor-mode="editorMode" 
       :comment-content="commentContent"
-      @openEditMode="openEditorInEditMode"
       @valueChanged="onValueChanged"
       @update="onCommentUpdate" />
       <div>{{ commentContent }}</div>
