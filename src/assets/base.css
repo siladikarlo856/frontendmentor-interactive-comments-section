@@ -22,6 +22,12 @@
   --border-radius-small: 5px;
   --border-radius-medium: 8px;
   --border-radius-large: 15px;
+
+  --padding-small: 1rem;
+  --padding-medium: 1.5rem;
+
+  --margin-small: 1rem;
+  --margin-medium: 1.5rem;
 }
 
 /* semantic color variables for this project */
