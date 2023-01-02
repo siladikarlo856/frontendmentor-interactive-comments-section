@@ -48,6 +48,12 @@
       </div>
     </div>
   </div>
+  <NewCommentCard
+    v-if="isReplyComponentVisible"
+    :username="username"
+    mode="reply"
+    @reply="onNewReply"
+  />
 </template>
 <script lang="ts">
 import {
@@ -66,12 +72,15 @@ import IconReply from "./icons/IconReply.vue";
 import IconDelete from "./icons/IconDelete.vue";
 import IconEdit from "./icons/IconEdit.vue";
 import { colors } from "@/config";
+import NewCommentCard from "./NewCommentCard.vue";
+
 export default defineComponent({
   name: "CommentCard",
   props: {
     username: { type: String },
     createdAt: { type: String },
     ownedByCurrentUser: { type: Boolean, default: false },
+    score: { type: Number },
     commentContent: { type: String },
   },
   components: {
@@ -81,9 +90,10 @@ export default defineComponent({
     IconReply,
     IconDelete,
     IconEdit,
+    NewCommentCard,
   },
   setup(props, context) {
-    const voteCount = ref(0);
+    const voteCount = ref(props.score);
     const editorMode = ref("preview");
 
     const textareaRef = ref<HTMLTextAreaElement>();
@@ -93,11 +103,14 @@ export default defineComponent({
       import.meta.url
     ).href;
 
+    const isReplyComponentVisible = ref(false);
+
     const isPreviewMode = computed(() => editorMode.value === "preview");
     const isEditMode = computed(() => editorMode.value === "edit");
 
     function onReplyClicked() {
       console.log("Reply clicked");
+      isReplyComponentVisible.value = true;
     }
     function onDeleteClicked() {
       console.log("delete clicked");
@@ -116,12 +129,18 @@ export default defineComponent({
     }
 
     function onChange(e: Event) {
+      adjustTextareaHeight();
       context.emit("valueChanged", (e.target as TextareaHTMLAttributes).value);
     }
 
     function adjustTextareaHeight() {
       textareaRef.value!.style.height = "auto";
       textareaRef.value!.style.height = textareaRef.value!.scrollHeight + "px";
+    }
+
+    function onNewReply(newReplyText: string) {
+      //TODO: create new reply
+      isReplyComponentVisible.value = false;
     }
 
     onMounted(() => {
@@ -140,12 +159,14 @@ export default defineComponent({
       voteCount,
       isPreviewMode,
       isEditMode,
+      isReplyComponentVisible,
       onReplyClicked,
       onDeleteClicked,
       onEditClicked,
       onUpdateButtonClicked,
       adjustTextareaHeight,
       onChange,
+      onNewReply,
     };
   },
 });

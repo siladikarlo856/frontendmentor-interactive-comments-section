@@ -1,69 +1,47 @@
 <template>
   <div class="container">
-    <CommentCard :ownedByCurrentUser="false" />
-    <NewCommentCard buttonText="Reply" />
-    <CommentCard :ownedByCurrentUser="true" />
-    <ReplySection />
-    <NewCommentCard buttonText="Send" />
-    <div class="button-color-container">
-      <ButtonIconText :text-color="colors.primary.moderateBlue"
-        ><template #icon><ReplyIcon /></template>Reply</ButtonIconText
-      >
-    </div>
-
-    <div class="button-color-container">
-      <ButtonIconText :text-color="colors.primary.moderateBlue"
-        ><template #icon><EditIcon /></template>Edit</ButtonIconText
-      >
-    </div>
-
-    <div class="button-color-container">
-      <ButtonIconText :text-color="colors.primary.softRed"
-        ><template #icon><DeleteIcon /></template>Delete</ButtonIconText
-      >
-    </div>
-
-    <div class="button-color-container">
-      <ButtonColor>Test</ButtonColor>
-    </div>
-    <div
-      class="button-color-container"
-      style="background-color: white; padding: 1rem"
-    >
-      <VoteCounter />
-    </div>
+    <CommentParser
+      v-for="comment in comments"
+      :key="comment.id"
+      :user="currentUser"
+      :comment="comment"
+    />
   </div>
+  <NewCommentCard
+    :username="currentUser.username"
+    mode="new-comment"
+    @send="onSendClicked"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import CommentCard from "./CommentCard.vue";
-import NewCommentCard from "./NewCommentCard.vue";
-import ReplySection from "./ReplySection.vue";
-import ReplyIcon from "@/components/icons/IconReply.vue";
-import EditIcon from "@/components/icons/IconEdit.vue";
-import DeleteIcon from "@/components/icons/IconDelete.vue";
-import ButtonIconText from "@/components/ButtonIconText.vue";
-import ButtonColor from "@/components/ButtonColor.vue";
-import { colors } from "@/config";
-import VoteCounter from "@/components/VoteCounter.vue";
+import { defineComponent, ref } from "vue";
+import dataJson from "@/data/data.json";
+import CommentParser from "../CommentParser.vue";
+import NewCommentCard from "../NewCommentCard.vue";
 
 export default defineComponent({
   name: "InteractiveCommentSection",
-  components: {
-    CommentCard,
-    NewCommentCard,
-    ReplySection,
-    ButtonIconText,
-    ReplyIcon,
-    EditIcon,
-    DeleteIcon,
-    ButtonColor,
-    VoteCounter,
-  },
+  components: { CommentParser, NewCommentCard },
   // props: {},
   setup() {
-    return { colors };
+    const { currentUser, comments: commentsInitValue } = dataJson;
+
+    const comments = ref(commentsInitValue);
+
+    function onSendClicked(content: string) {
+      console.log("send:", content);
+      comments.value.push({
+        id: 5,
+        content: content,
+        createdAt: "just now",
+        score: 0,
+        user: currentUser,
+        replies: [],
+      });
+    }
+
+    return { currentUser, comments, onSendClicked };
   },
 });
 </script>
@@ -75,13 +53,6 @@ export default defineComponent({
   margin-inline: auto;
   display: flex;
   flex-direction: column;
-}
-
-.button-color-container {
-  width: 200px;
-  margin-inline: auto;
-  display: flex;
-  justify-content: center;
-  margin: 1rem auto;
+  align-items: center;
 }
 </style>
