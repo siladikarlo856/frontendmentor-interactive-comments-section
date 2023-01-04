@@ -15,7 +15,7 @@
           <ButtonIconText
             v-if="ownedByCurrentUser"
             :text-color="colors.primary.softRed"
-            @click="onDeleteClicked"
+            @click="onDeleteClicked(id)"
             ><template #icon><IconDelete /></template>Delete</ButtonIconText
           >
           <ButtonIconText
@@ -76,10 +76,13 @@ import IconDelete from "./icons/IconDelete.vue";
 import IconEdit from "./icons/IconEdit.vue";
 import { colors } from "@/config";
 import NewCommentCard from "./NewCommentCard.vue";
+import { useModalStore } from "@/stores/modalStore";
+import { useCommentsStore } from "@/stores/commentsStore";
 
 export default defineComponent({
   name: "CommentCard",
   props: {
+    id: { type: Number, required: true },
     username: { type: String },
     createdAt: { type: String },
     ownedByCurrentUser: { type: Boolean, default: false },
@@ -113,6 +116,12 @@ export default defineComponent({
     const isPreviewMode = computed(() => editorMode.value === "preview");
     const isEditMode = computed(() => editorMode.value === "edit");
 
+    const commentsStore = useCommentsStore();
+    const { setSelectedId } = commentsStore;
+
+    const modalStore = useModalStore();
+    const { showModal } = modalStore;
+
     function onScoreUpdated(score: number) {
       context.emit("score-updated", score);
     }
@@ -123,7 +132,8 @@ export default defineComponent({
       replyTo.value = replyToUsername;
     }
     function onDeleteClicked() {
-      console.log("delete clicked");
+      setSelectedId(props.id);
+      showModal();
     }
     function onEditClicked() {
       console.log("edit clicked");

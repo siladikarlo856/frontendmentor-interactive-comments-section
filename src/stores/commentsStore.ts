@@ -25,6 +25,8 @@ export const useCommentsStore = defineStore("comments", () => {
     // return _comments.value.sort((a, b) => b.score - a.score);
   });
 
+  const selectedId = ref(-1);
+
   function addNewComment(comment: Comment) {
     const newComment = new CommentModel(comment);
     newComment.id = ++currentMaxId;
@@ -94,6 +96,30 @@ export const useCommentsStore = defineStore("comments", () => {
     array.sort((a, b) => b.score - a.score);
   }
 
+  function setSelectedId(id: number) {
+    selectedId.value = id;
+  }
+
+  function resetSelectedId() {
+    selectedId.value = -1;
+  }
+
+  function deleteSelected() {
+    if (selectedId.value === -1) {
+      return;
+    }
+    deleteById(selectedId.value);
+  }
+
+  function deleteById(id: number) {
+    _comments.value = _comments.value.filter((comment) => {
+      comment.replies = comment.replies.filter((reply) => {
+        return reply.id !== id;
+      });
+      return comment.id !== id;
+    });
+  }
+
   return {
     currentUser,
     addNewComment,
@@ -101,5 +127,9 @@ export const useCommentsStore = defineStore("comments", () => {
     updateReplyScoreById,
     _comments,
     addReplyToCommentById,
+    selectedId,
+    setSelectedId,
+    resetSelectedId,
+    deleteSelected,
   };
 });

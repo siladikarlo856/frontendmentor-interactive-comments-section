@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <CommentParser
-      v-for="comment in comments"
+      v-for="comment in commentsStore._comments"
       :key="comment.id"
       :user="currentUser"
       :comment="comment"
@@ -15,21 +15,28 @@
       @send="onSendClicked"
     />
   </div>
+  <DeleteModal v-if="isModalVisible" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import CommentParser from "../CommentParser.vue";
 import NewCommentCard from "../NewCommentCard.vue";
+import DeleteModal from "../DeleteModal.vue";
 
 import { useCommentsStore } from "@/stores/commentsStore";
+import { useModalStore } from "@/stores/modalStore";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
   name: "InteractiveCommentSection",
-  components: { CommentParser, NewCommentCard },
+  components: { CommentParser, NewCommentCard, DeleteModal },
   // props: {},
   setup() {
     const commentsStore = useCommentsStore();
+    const modalStore = useModalStore();
+
+    const { isModalVisible } = storeToRefs(modalStore);
 
     function onSendClicked(content: string) {
       console.log("send:", content);
@@ -60,8 +67,9 @@ export default defineComponent({
     }
 
     return {
+      isModalVisible,
       currentUser: commentsStore.currentUser,
-      comments: commentsStore._comments,
+      commentsStore,
       onSendClicked,
       onScoreUpdated,
       onReplyScoreUpdated,

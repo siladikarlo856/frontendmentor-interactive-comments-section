@@ -1,6 +1,7 @@
 <template>
   <div class="comment-parser-container">
     <CommentCard
+      :id="comment.id"
       :username="comment.user.username"
       :created-at="comment.createdAt"
       :owned-by-current-user="isOwnedByCurrentUser"
@@ -20,6 +21,7 @@
       </div>
       <div class="replies-container">
         <CommentCard
+          :id="reply.id"
           :username="reply.user.username"
           :created-at="reply.createdAt"
           :ownedByCurrentUser="isReplyOwnedByCurrentUser(reply)"

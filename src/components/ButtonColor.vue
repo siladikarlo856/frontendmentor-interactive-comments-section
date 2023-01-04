@@ -1,14 +1,32 @@
 <template>
-  <button>
+  <button :style="styleObject">
     <slot></slot>
   </button>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
+
+import { colors } from "@/config";
 export default defineComponent({
   name: "ButtonColor",
-  setup() {
-    return {};
+  props: {
+    buttonColor: {
+      type: String,
+      default: colors.primary.moderateBlue,
+    },
+    buttonColorOnHover: {
+      type: String,
+      default: colors.primary.lightGrayishBlue,
+    },
+  },
+  setup(props) {
+    const styleObject = computed(() => {
+      return {
+        "--color": props.buttonColor,
+        "--color-hover": props.buttonColorOnHover,
+      };
+    });
+    return { styleObject };
   },
 });
 </script>
@@ -35,11 +53,11 @@ button {
   padding: 0.6em 1.2em;
   border-radius: var(--border-radius-small);
 
-  background-color: var(--color-moderate-blue);
+  background-color: var(--color);
   color: var(--color-white);
 }
 
 button:hover {
-  background-color: var(--color-light-grayish-blue);
+  background-color: var(--color-hover);
 }
 </style>
