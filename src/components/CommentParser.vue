@@ -5,10 +5,13 @@
       :created-at="comment.createdAt"
       :owned-by-current-user="isOwnedByCurrentUser"
       :score="comment.score"
+      @score-updated="(score) => onScoreUpdated(comment.id, score)"
       :commentContent="comment.content"
+      @reply="(replyContent: string) => onReplyClicked(comment.id, replyContent)"
     />
     <div
       class="reply-section-container"
+      s
       v-for="reply in comment.replies"
       :key="reply.id"
     >
@@ -22,6 +25,10 @@
           :ownedByCurrentUser="isReplyOwnedByCurrentUser(reply)"
           :score="reply.score"
           :comment-content="reply.content"
+          @reply="(replyContent: string) => onReplyClicked(comment.id, replyContent)"
+          @score-updated="
+            (score) => onReplyScoreUpdated(comment.id, reply.id, score)
+          "
         />
       </div>
     </div>
@@ -36,23 +43,49 @@ import CommentCard from "./CommentCard.vue";
 
 import type { User } from "@/types/User";
 import type { Comment } from "@/types/Comment";
+import type { Reply } from "@/types/Reply";
 
 export default defineComponent({
   name: "CommentParser",
   props: {
-    user: { type: Object as PropType<User> },
-    comment: { type: Object as PropType<Comment> },
+    user: { type: Object as PropType<User>, required: true },
+    comment: { type: Object as PropType<Comment>, required: true },
   },
   components: { CommentCard },
-  setup(props) {
+  emits: ["score-updated", "reply-score-updated", "new-reply"],
+  setup(props, context) {
     const isOwnedByCurrentUser = computed(
       () => props.user.username === props.comment.user.username
     );
 
-    function isReplyOwnedByCurrentUser(reply: Comment) {
+    function isReplyOwnedByCurrentUser(reply: Reply) {
       return props.user.username === reply.user.username;
     }
-    return { isOwnedByCurrentUser, isReplyOwnedByCurrentUser };
+
+    function onScoreUpdated(id: number, score: number) {
+      context.emit("score-updated", id, score);
+    }
+
+    function onReplyScoreUpdated(
+      commentId: number,
+      replyId: number,
+      score: number
+    ) {
+      context.emit("reply-score-updated", commentId, replyId, score);
+    }
+
+    function onReplyClicked(commentId: number, replyContent: string) {
+      console.log("parser onReply", commentId, replyContent);
+
+      context.emit("new-reply", commentId, replyContent);
+    }
+    return {
+      isOwnedByCurrentUser,
+      isReplyOwnedByCurrentUser,
+      onScoreUpdated,
+      onReplyScoreUpdated,
+      onReplyClicked,
+    };
   },
 });
 </script>

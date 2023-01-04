@@ -5,43 +5,68 @@
       :key="comment.id"
       :user="currentUser"
       :comment="comment"
+      @score-updated="onScoreUpdated"
+      @reply-score-updated="onReplyScoreUpdated"
+      @new-reply="onNewReply"
+    />
+    <NewCommentCard
+      :username="currentUser.username"
+      mode="new-comment"
+      @send="onSendClicked"
     />
   </div>
-  <NewCommentCard
-    :username="currentUser.username"
-    mode="new-comment"
-    @send="onSendClicked"
-  />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import dataJson from "@/data/data.json";
+import { defineComponent } from "vue";
 import CommentParser from "../CommentParser.vue";
 import NewCommentCard from "../NewCommentCard.vue";
+
+import { useCommentsStore } from "@/stores/commentsStore";
 
 export default defineComponent({
   name: "InteractiveCommentSection",
   components: { CommentParser, NewCommentCard },
   // props: {},
   setup() {
-    const { currentUser, comments: commentsInitValue } = dataJson;
-
-    const comments = ref(commentsInitValue);
+    const commentsStore = useCommentsStore();
 
     function onSendClicked(content: string) {
       console.log("send:", content);
-      comments.value.push({
-        id: 5,
+      commentsStore.addNewComment({
+        id: -1,
         content: content,
         createdAt: "just now",
         score: 0,
-        user: currentUser,
+        user: commentsStore.currentUser,
         replies: [],
       });
     }
 
-    return { currentUser, comments, onSendClicked };
+    function onScoreUpdated(id: number, score: number) {
+      commentsStore.updateScoreById(id, score);
+    }
+
+    function onNewReply(commentId: number, replyContent: string) {
+      commentsStore.addReplyToCommentById(commentId, replyContent);
+    }
+
+    function onReplyScoreUpdated(
+      commentId: number,
+      replyId: number,
+      score: number
+    ) {
+      commentsStore.updateReplyScoreById(commentId, replyId, score);
+    }
+
+    return {
+      currentUser: commentsStore.currentUser,
+      comments: commentsStore._comments,
+      onSendClicked,
+      onScoreUpdated,
+      onReplyScoreUpdated,
+      onNewReply,
+    };
   },
 });
 </script>

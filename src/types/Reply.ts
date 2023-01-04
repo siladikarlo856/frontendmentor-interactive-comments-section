@@ -1,11 +1,10 @@
-import type { Reply } from "./Reply";
 import type { User } from "./User";
 
-export interface Comment {
+export interface Reply {
   id: number;
   content: string;
   createdAt: string;
   score: number;
+  replyingTo: string;
   user: User;
-  replies: Reply[];
 }

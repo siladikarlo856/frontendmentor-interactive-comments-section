@@ -1,6 +1,8 @@
 <template>
   <div class="comment-card-container">
-    <div class="score-container"><VoteCounter v-model="voteCount" /></div>
+    <div class="score-container">
+      <VoteCounter v-model="voteCount" @update:modelValue="onScoreUpdated" />
+    </div>
     <div class="content-container">
       <div class="user-buttons-container">
         <div class="user-info-container">
@@ -25,7 +27,7 @@
           <ButtonIconText
             v-if="!ownedByCurrentUser"
             :text-color="colors.primary.moderateBlue"
-            @click="onReplyClicked"
+            @click="onReplyClicked(username)"
             ><template #icon><IconReply /></template>Reply</ButtonIconText
           >
         </div>
@@ -51,6 +53,7 @@
   <NewCommentCard
     v-if="isReplyComponentVisible"
     :username="username"
+    :reply-to="replyTo"
     mode="reply"
     @reply="onNewReply"
   />
@@ -92,9 +95,11 @@ export default defineComponent({
     IconEdit,
     NewCommentCard,
   },
+  emits: ["score-updated", "reply"],
   setup(props, context) {
     const voteCount = ref(props.score);
     const editorMode = ref("preview");
+    const replyTo = ref("");
 
     const textareaRef = ref<HTMLTextAreaElement>();
 
@@ -108,9 +113,14 @@ export default defineComponent({
     const isPreviewMode = computed(() => editorMode.value === "preview");
     const isEditMode = computed(() => editorMode.value === "edit");
 
-    function onReplyClicked() {
+    function onScoreUpdated(score: number) {
+      context.emit("score-updated", score);
+    }
+
+    function onReplyClicked(replyToUsername: string) {
       console.log("Reply clicked");
       isReplyComponentVisible.value = true;
+      replyTo.value = replyToUsername;
     }
     function onDeleteClicked() {
       console.log("delete clicked");
@@ -140,7 +150,10 @@ export default defineComponent({
 
     function onNewReply(newReplyText: string) {
       //TODO: create new reply
+      console.log("comment card onNewReply", newReplyText);
+      context.emit("reply", newReplyText);
       isReplyComponentVisible.value = false;
+      replyTo.value = "";
     }
 
     onMounted(() => {
@@ -157,9 +170,11 @@ export default defineComponent({
       textareaRef,
       colors,
       voteCount,
+      replyTo,
       isPreviewMode,
       isEditMode,
       isReplyComponentVisible,
+      onScoreUpdated,
       onReplyClicked,
       onDeleteClicked,
       onEditClicked,

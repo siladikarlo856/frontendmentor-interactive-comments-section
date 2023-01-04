@@ -39,6 +39,7 @@ export default defineComponent({
   props: {
     username: { type: String },
     mode: { type: String, default: "new-comment" },
+    replyTo: { type: String, default: "" },
   },
   components: { ButtonColor },
   emits: ["send", "reply", "valueChanged"],
@@ -50,7 +51,7 @@ export default defineComponent({
       import.meta.url
     ).href;
 
-    const textAreaContent = ref("");
+    const textAreaContent = ref(props.replyTo ? `@${props.replyTo} ` : "");
 
     const isNewCommentMode = computed(() => props.mode === "new-comment");
     const isReplyMode = computed(() => props.mode === "reply");
