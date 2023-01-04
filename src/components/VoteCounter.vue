@@ -94,8 +94,8 @@ button i {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 6rem;
-    height: 2rem;
+    width: 12ch;
+    height: 4rem;
   }
 
   .vote-score,
