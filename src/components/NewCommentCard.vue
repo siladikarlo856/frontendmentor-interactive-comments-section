@@ -51,7 +51,7 @@ export default defineComponent({
       import.meta.url
     ).href;
 
-    const textAreaContent = ref(props.replyTo ? `@${props.replyTo} ` : "");
+    const textAreaContent = ref("");
 
     const isNewCommentMode = computed(() => props.mode === "new-comment");
     const isReplyMode = computed(() => props.mode === "reply");
@@ -67,13 +67,23 @@ export default defineComponent({
     }
 
     function onSendClicked() {
-      context.emit("send", textAreaContent.value);
+      if (textAreaContent.value === "") {
+        return;
+      }
+      context.emit("send", getReplyContent());
       textAreaContent.value = "";
     }
 
     function onReplyClicked() {
-      context.emit("reply", textAreaContent.value);
+      if (textAreaContent.value === "") {
+        return;
+      }
+      context.emit("reply", getReplyContent());
       textAreaContent.value = "";
+    }
+
+    function getReplyContent() {
+      return textAreaContent.value;
     }
 
     onMounted(() => {
