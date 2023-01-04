@@ -120,6 +120,20 @@ export const useCommentsStore = defineStore("comments", () => {
     });
   }
 
+  function updateContentById(id: number, content: string) {
+    _comments.value.forEach((comment) => {
+      if (comment.id === id) {
+        comment.content = content;
+      } else {
+        comment.replies.forEach((reply) => {
+          if (reply.id === id) {
+            reply.content = content;
+          }
+        });
+      }
+    });
+  }
+
   return {
     currentUser,
     addNewComment,
@@ -131,5 +145,6 @@ export const useCommentsStore = defineStore("comments", () => {
     setSelectedId,
     resetSelectedId,
     deleteSelected,
+    updateContentById,
   };
 });

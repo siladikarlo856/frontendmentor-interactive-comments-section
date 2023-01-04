@@ -9,6 +9,7 @@
       @score-updated="(score) => onScoreUpdated(comment.id, score)"
       :commentContent="comment.content"
       @reply="(replyContent: string) => onReplyClicked(comment.id, replyContent)"
+      @update="(newContent: string) => onContentUpdated(comment.id, newContent)"
     />
     <div
       class="reply-section-container"
@@ -31,6 +32,7 @@
           @score-updated="
             (score) => onReplyScoreUpdated(comment.id, reply.id, score)
           "
+          @update="(newContent: string) => onContentUpdated(reply.id, newContent)"
         />
       </div>
     </div>
@@ -46,6 +48,7 @@ import CommentCard from "./CommentCard.vue";
 import type { User } from "@/types/User";
 import type { Comment } from "@/types/Comment";
 import type { Reply } from "@/types/Reply";
+import { useCommentsStore } from "@/stores/commentsStore";
 
 export default defineComponent({
   name: "CommentParser",
@@ -56,6 +59,9 @@ export default defineComponent({
   components: { CommentCard },
   emits: ["score-updated", "reply-score-updated", "new-reply"],
   setup(props, context) {
+    const commentsStore = useCommentsStore();
+    const { updateContentById } = commentsStore;
+
     const isOwnedByCurrentUser = computed(
       () => props.user.username === props.comment.user.username
     );
@@ -81,12 +87,17 @@ export default defineComponent({
 
       context.emit("new-reply", commentId, replyContent);
     }
+
+    function onContentUpdated(id: number, content: string) {
+      updateContentById(id, content);
+    }
     return {
       isOwnedByCurrentUser,
       isReplyOwnedByCurrentUser,
       onScoreUpdated,
       onReplyScoreUpdated,
       onReplyClicked,
+      onContentUpdated,
     };
   },
 });

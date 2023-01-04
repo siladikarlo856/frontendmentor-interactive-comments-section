@@ -98,11 +98,12 @@ export default defineComponent({
     IconEdit,
     NewCommentCard,
   },
-  emits: ["score-updated", "reply"],
+  emits: ["score-updated", "reply", "valueChanged", "update"],
   setup(props, context) {
     const voteCount = ref(props.score);
     const editorMode = ref("preview");
     const replyTo = ref("");
+    const content = ref(props.commentContent);
 
     const textareaRef = ref<HTMLTextAreaElement>();
 
@@ -145,12 +146,13 @@ export default defineComponent({
 
     function onUpdateButtonClicked() {
       editorMode.value = "preview";
-      context.emit("update");
+      context.emit("update", content.value);
     }
 
     function onChange(e: Event) {
+      content.value = (e.target as TextareaHTMLAttributes).value as string;
       adjustTextareaHeight();
-      context.emit("valueChanged", (e.target as TextareaHTMLAttributes).value);
+      context.emit("valueChanged", content.value);
     }
 
     function adjustTextareaHeight() {
