@@ -189,4 +189,10 @@ button {
 .upvote-icon {
   fill: black;
 }
+
+@media only screen and (max-width: 600px) {
+  .comment-card-container {
+    background-color: red;
+  }
+}
 </style>

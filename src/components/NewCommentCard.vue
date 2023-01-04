@@ -157,4 +157,34 @@ export default defineComponent({
 .user-input-container textarea:hover {
   border-color: var(--color-moderate-blue);
 }
+
+@media only screen and (max-width: 600px) {
+  .new-comment-card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .user-input-container {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    margin: 0;
+  }
+
+  .button-container {
+    justify-self: end;
+  }
+
+  button {
+    padding: 1rem 2rem;
+  }
+
+  .user-avatar-container {
+    justify-self: start;
+  }
+  .user-avatar-container > img {
+    height: 2rem;
+  }
+}
 </style>

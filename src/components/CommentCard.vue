@@ -3,51 +3,48 @@
     <div class="score-container">
       <VoteCounter v-model="voteCount" @update:modelValue="onScoreUpdated" />
     </div>
-    <div class="content-container">
-      <div class="user-buttons-container">
-        <div class="user-info-container">
-          <img :src="imageUrl" alt="" class="user-avatar" />
-          <div class="username">{{ username }}</div>
-          <div v-if="ownedByCurrentUser" class="you-badge">you</div>
-          <div class="created-at">{{ createdAt }}</div>
-        </div>
-        <div class="action-buttons-container">
-          <ButtonIconText
-            v-if="ownedByCurrentUser"
-            :text-color="colors.primary.softRed"
-            @click="onDeleteClicked(id)"
-            ><template #icon><IconDelete /></template>Delete</ButtonIconText
-          >
-          <ButtonIconText
-            v-if="ownedByCurrentUser"
-            :text-color="colors.primary.moderateBlue"
-            @click="onEditClicked"
-            ><template #icon><IconEdit /></template>Edit</ButtonIconText
-          >
-          <ButtonIconText
-            v-if="!ownedByCurrentUser"
-            :text-color="colors.primary.moderateBlue"
-            @click="onReplyClicked(username)"
-            ><template #icon><IconReply /></template>Reply</ButtonIconText
-          >
-        </div>
-      </div>
-      <div class="content">
-        <textarea
-          :value="commentContent"
-          @input="onChange"
-          :readonly="isPreviewMode"
-          :class="{
-            'textarea__preview-mode': isPreviewMode,
-            'textarea__edit-mode': isEditMode,
-          }"
-          ref="textareaRef"
-          placeholder="Add a comment..."
-        ></textarea>
-      </div>
-      <div class="update-button-container" v-if="isEditMode">
-        <ButtonColor @click="onUpdateButtonClicked">Update</ButtonColor>
-      </div>
+
+    <div class="user-info-container">
+      <img :src="imageUrl" alt="" class="user-avatar" />
+      <div class="username">{{ username }}</div>
+      <div v-if="ownedByCurrentUser" class="you-badge">you</div>
+      <div class="created-at">{{ createdAt }}</div>
+    </div>
+    <div class="action-buttons-container">
+      <ButtonIconText
+        v-if="ownedByCurrentUser"
+        :text-color="colors.primary.softRed"
+        @click="onDeleteClicked(id)"
+        ><template #icon><IconDelete /></template>Delete</ButtonIconText
+      >
+      <ButtonIconText
+        v-if="ownedByCurrentUser"
+        :text-color="colors.primary.moderateBlue"
+        @click="onEditClicked"
+        ><template #icon><IconEdit /></template>Edit</ButtonIconText
+      >
+      <ButtonIconText
+        v-if="!ownedByCurrentUser"
+        :text-color="colors.primary.moderateBlue"
+        @click="onReplyClicked(username)"
+        ><template #icon><IconReply /></template>Reply</ButtonIconText
+      >
+    </div>
+    <div class="content">
+      <textarea
+        :value="commentContent"
+        @input="onChange"
+        :readonly="isPreviewMode"
+        :class="{
+          'textarea__preview-mode': isPreviewMode,
+          'textarea__edit-mode': isEditMode,
+        }"
+        ref="textareaRef"
+        placeholder="Add a comment..."
+      ></textarea>
+    </div>
+    <div class="update-button-container" v-if="isEditMode">
+      <ButtonColor @click="onUpdateButtonClicked">Update</ButtonColor>
     </div>
   </div>
   <NewCommentCard
@@ -205,28 +202,42 @@ export default defineComponent({
   background-color: var(--color-white);
   padding: var(--padding-medium);
 
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 6fr 2fr;
+  grid-auto-rows: min-content;
+  gap: 1rem;
   margin-bottom: var(--margin-medium);
 }
 
 .score-container {
-  margin-right: var(--margin-medium);
+  grid-column: 1;
+  grid-row: 1 / 3;
+  width: 4rem;
+  max-height: 10rem;
 }
 
-.content-container {
-  flex-grow: 1;
+.user-info-container {
+  grid-column: 2 / 5;
+  grid-row: 1;
 }
 
-.user-buttons-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  flex-grow: 1;
-  margin-bottom: var(--margin-small);
+.action-buttons-container {
+  grid-column: 2 / 5;
+  grid-row: 1;
+  justify-self: end;
 }
 
+.content {
+  grid-column: 2 / 5;
+  grid-row: 2;
+  height: 100%;
+}
+
+.update-button-container {
+  grid-column: 1 / 5;
+  justify-self: end;
+  margin: 0;
+}
 .user-info-container {
   display: flex;
   flex-direction: row;
@@ -303,5 +314,43 @@ textarea:hover {
   display: flex;
   justify-content: end;
   margin-top: var(--margin-small);
+}
+
+@media only screen and (max-width: 600px) {
+  .comment-card-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr auto 1fr;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .score-container {
+    grid-column: 1 / 3;
+    grid-row: 3;
+  }
+
+  .user-info-container {
+    grid-column: 1 / 5;
+    grid-row: 1;
+  }
+
+  .action-buttons-container {
+    grid-column: 3 / 5;
+    grid-row: 3;
+    justify-self: end;
+  }
+
+  .content {
+    grid-column: 1 / 5;
+    grid-row: 2;
+    height: 100%;
+  }
+
+  .update-button-container {
+    grid-column: 1 / 5;
+    justify-self: end;
+    margin: 0;
+  }
 }
 </style>

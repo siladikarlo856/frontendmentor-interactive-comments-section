@@ -87,4 +87,20 @@ button i {
   display: flex;
   align-items: center;
 }
+
+@media only screen and (max-width: 600px) {
+  .vote-counter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 6rem;
+    height: 2rem;
+  }
+
+  .vote-score,
+  button {
+    flex-grow: 0;
+  }
+}
 </style>
