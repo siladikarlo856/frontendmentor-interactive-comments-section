@@ -14,7 +14,7 @@
       <ButtonIconText
         v-if="ownedByCurrentUser"
         :text-color="colors.primary.softRed"
-        @click="onDeleteClicked(id)"
+        @click="onDeleteClicked"
         ><template #icon><IconDelete /></template>Delete</ButtonIconText
       >
       <ButtonIconText
@@ -80,10 +80,10 @@ export default defineComponent({
   name: "CommentCard",
   props: {
     id: { type: Number, required: true },
-    username: { type: String },
+    username: { type: String, required: true },
     createdAt: { type: String },
     ownedByCurrentUser: { type: Boolean, default: false },
-    score: { type: Number },
+    score: { type: Number, required: true },
     commentContent: { type: String },
   },
   components: {
